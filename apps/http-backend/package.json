@@ -9,9 +9,13 @@
     "dev": "npm run build && npm run start"
   },
   "dependencies": {
-    "@repo/typescript-config":"workspace:*"
+    "@repo/backend-common": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "jsonwebtoken": "^9.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
