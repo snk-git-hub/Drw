@@ -1,16 +1,14 @@
-import { z } from "zod";
-
-export const CreateUserSchema = z.object({
-    username: z.string().min(3).max(20),
-    password: z.string(),
-    name: z.string()
+import {z} from 'zod';
+const Creaateuserschema = z.object({
+    email: z.string().email('invalid email format'),
+    password: z.string().min(5, 'Password must have least 5 charecters'),
+    name: z.string().min(3)
 })
-
-export const SigninSchema = z.object({
-    username: z.string().min(3).max(20),
-    password: z.string(),
+const Signinschema = z.object({
+    email: z.string().email('invalid wmail format'),
+    password: z.string().min(5, 'password mush have least 5 charecters ')
 })
-
-export const CreateRoomSchema = z.object({
-    name: z.string().min(3).max(20),
+const CreateRoom = z.object({
+    name: z.string().min(5).max(5)
 })
+export {Creaateuserschema, Signinschema, CreateRoom}
