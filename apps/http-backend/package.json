@@ -11,10 +11,14 @@
   "dependencies": {
     "@repo/backend-common": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/db":"workspace:*",
+    "@repo/common":"workspace:*",
     "jsonwebtoken": "^9.0.2"
+
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.9"
+    "@types/jsonwebtoken": "^9.0.7",
+    "jsonwebtoken": "^9.0.2"
   },
   "keywords": [],
   "author": "",
