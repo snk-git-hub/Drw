@@ -5,10 +5,6 @@ Real-time digital whiteboard for collaborative planning and design. Uses WebSock
 
 
 
-
-
-
-
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
