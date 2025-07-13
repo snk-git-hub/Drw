@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db":"workspace:*",
-    "@repo/common":"workspace:*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"
-
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.7",
     "jsonwebtoken": "^9.0.2"
   },
