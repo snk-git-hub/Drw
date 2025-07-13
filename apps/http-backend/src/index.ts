@@ -26,7 +26,7 @@ app.post("/signup", async (req: Request, res: Response) => {
         const user = await prismaClient.user.create({
             data: {
                 email,
-                password, // ⚠️ TODO: hash before production
+                password, //  TODO: hash before production
                 name
             }
         });
@@ -51,7 +51,7 @@ app.post("/signin", async (req: Request, res: Response) => {
     const user = await prismaClient.user.findFirst({
         where: {
             email,
-            password // ⚠️ TODO: compare hashed password
+            password //  TODO: compare hashed password
         }
     });
 
