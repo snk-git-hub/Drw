@@ -32,9 +32,11 @@ app.post("/signup", async (req: Request, res: Response) => {
         });
 
         res.json({ userId: user.id });
-    } catch (e) {
-        res.status(409).json({ message: "User already exists with this email" });
-    }
+    } catch (err) {
+  console.error("Signup error:", err);  // Add this
+  res.status(500).json({ message: "internal server error" });
+
+}
 });
 
 // /signin route
