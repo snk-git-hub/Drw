@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// /signup route
+// signup route
 app.post("/signup", async (req: Request, res: Response) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
 
