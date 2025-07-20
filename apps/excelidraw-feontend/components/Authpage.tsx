@@ -11,7 +11,7 @@ return  <div className="w-screen h-screen flex justify-center items-center bg-bl
       }}></div>
 
       <div className="relative p-10 m-4 bg-zinc-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-800/50 w-full max-w-md">
-     \
+     
         <div className="mb-10 text-center">
           <div className="w-12 h-12 bg-white rounded-lg mx-auto mb-6 flex items-center justify-center">
             <div className="w-6 h-6 bg-black rounded-sm"></div>
