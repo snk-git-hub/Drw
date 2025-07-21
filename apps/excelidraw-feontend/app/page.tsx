@@ -1,8 +1,10 @@
 "use client"
-
+import Link from 'next/link'
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 export default function CollaborativeDrawingLanding() {
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -13,6 +15,8 @@ export default function CollaborativeDrawingLanding() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  
 
   return (
     <div className="bg-black min-h-screen relative overflow-hidden">
@@ -46,7 +50,7 @@ export default function CollaborativeDrawingLanding() {
           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
             <div className="w-4 h-4 bg-black rounded-sm"></div>
           </div>
-          <span className="text-white font-light text-lg tracking-wide">DrawSync</span>
+          <span className="text-white font-light text-lg tracking-wide">DrawSynDrc</span>
         </div>
         
         <div className="hidden md:flex space-x-8">
@@ -55,8 +59,13 @@ export default function CollaborativeDrawingLanding() {
           <a href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-light uppercase tracking-wide">About</a>
         </div>
 
-        <button className="px-6 py-2 bg-white text-black text-sm font-medium rounded-lg hover:bg-zinc-100 transition-all duration-200 uppercase tracking-wide">
-          Sign In
+        <button 
+        
+            className="px-6 py-2 bg-white text-black text-sm font-medium rounded-lg hover:bg-zinc-100 transition-all duration-200 uppercase tracking-wide">
+          <Link 
+          href="/signin"
+          className="... inline-block"
+          >Sign In</Link>
         </button>
       </nav>
 
