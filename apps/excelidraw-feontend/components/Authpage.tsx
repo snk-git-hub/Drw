@@ -55,6 +55,17 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
             />
           </div>
 
+           {isSignin?    
+           null:<div className="relative">
+            <input
+              placeholder="Name"
+              type="Name"
+              className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light"
+            />
+          </div>}
+
+
+
           <button
             onClick={canvas}
             className="w-full mt-8 py-4 bg-white text-black font-medium rounded-lg hover:bg-zinc-100 transition-all duration-200 text-sm tracking-wide uppercase"
