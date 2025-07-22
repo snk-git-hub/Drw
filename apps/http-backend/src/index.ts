@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { verify } from "jsonwebtoken";
 import cors from "cors";
 import { JWT_SECRET } from '@repo/backend-common/config';
 import { middleware } from "./middleware";
@@ -121,6 +121,25 @@ app.get("/room/:slug", async (req: Request, res: Response) => {
 
     res.json({ room });
 });
+// / verify token
+
+app.post("/verify-token", (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ valid: false, message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return res.status(200).json({ valid: true, payload: decoded });
+  } catch (error) {
+    return res.status(401).json({ valid: false, message: "Invalid or expired token" });
+  }
+});
+
+
 
 app.listen(3001, () => {
     console.log("http-backend running on port 3001");

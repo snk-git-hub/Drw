@@ -1,18 +1,83 @@
 "use client"
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
   const router = useRouter();
-  const handleNavigate = () => {
-    if (isSignin) {
-      router.push("/signup");
-    } else {
-      router.push("/signin");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    if (!email || !password || (!isSignin && !name)) {
+      setError("Please fill all fields.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      if (isSignin) {
+        const res = await axios.post(`${API_URL}/signin`, { 
+          email, 
+          password 
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 10000 
+        });
+        
+        if (res.data.token) {
+          localStorage.setItem('authToken', res.data.token);
+        }
+        
+        router.push("/canvas");
+      } else {
+        const res = await axios.post(`${API_URL}/signup`, { 
+          email, 
+          password, 
+          name 
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 10000 
+        });
+        
+        if (res.data.token) {
+          localStorage.setItem('authToken', res.data.token);
+        }
+        
+        router.push("/canvas");
+      }
+    } catch (err: any) {
+      console.error('Auth error:', err);
+      
+      if (err.code === 'ECONNREFUSED') {
+        setError("Unable to connect to server. Please check if the backend is running.");
+      } else if (err.response) {
+        setError(err.response.data?.message || "Authentication failed");
+      } else if (err.request) {
+        setError("Network error. Please check your connection.");
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const canvas=()=>{
-    router.push("/canvas");
-  }
+  const handleNavigate = () => router.push(isSignin ? "/signup" : "/signin");
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-black relative overflow-hidden">
@@ -39,39 +104,56 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
         </div>
 
         <div className="space-y-8">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Email address"
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light"
-            />
-          </div>
+          {error && (
+            <div className="p-3 bg-red-900/50 border border-red-700 rounded-lg">
+              <p className="text-red-200 text-sm">{error}</p>
+            </div>
+          )}
 
-          <div className="relative">
-            <input
-              placeholder="Password"
-              type="password"
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light"
-            />
-          </div>
+          <form className="space-y-8" onSubmit={handleSubmit}>
+            <div className="relative">
+              <input
+                type="email"
+                value={email}
+                placeholder="Email address"
+                onChange={e => setEmail(e.target.value)}
+                disabled={isLoading}
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light disabled:opacity-50"
+              />
+            </div>
 
-           {isSignin?    
-           null:<div className="relative">
-            <input
-              placeholder="Name"
-              type="Name"
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light"
-            />
-          </div>}
+            <div className="relative">
+              <input
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                disabled={isLoading}
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light disabled:opacity-50"
+              />
+            </div>
 
+            {!isSignin && (
+              <div className="relative">
+                <input
+                  placeholder="Full Name"
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  disabled={isLoading}
+                  className="w-full px-0 py-3 bg-transparent border-0 border-b border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:border-white transition-all duration-300 text-sm font-light disabled:opacity-50"
+                />
+              </div>
+            )}
 
-
-          <button
-            onClick={canvas}
-            className="w-full mt-8 py-4 bg-white text-black font-medium rounded-lg hover:bg-zinc-100 transition-all duration-200 text-sm tracking-wide uppercase"
-          >
-            {isSignin ? "Sign In" : "Sign Up"}
-          </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-8 py-4 bg-white text-black font-medium rounded-lg hover:bg-zinc-100 transition-all duration-200 text-sm tracking-wide uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Please wait..." : (isSignin ? "Sign In" : "Sign Up")}
+            </button>
+          </form>
         </div>
 
         <div className="mt-8 text-center">

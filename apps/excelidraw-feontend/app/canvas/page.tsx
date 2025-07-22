@@ -1,6 +1,9 @@
 "use client"
 
 import { useRef, useEffect, useState, MouseEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 type Tool = 'pen' | 'eraser';
 
@@ -8,10 +11,72 @@ interface CanvasProps {}
 
 const Canvas: React.FC<CanvasProps> = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const router = useRouter();
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [tool, setTool] = useState<Tool>('pen');
   const [brushSize, setBrushSize] = useState<number>(2);
   const [color, setColor] = useState<string>('#000000');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+ const verifyToken = async (token: string): Promise<boolean> => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3001/verify-token',
+      {}, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data.valid;
+  } catch (error: any) {
+    console.error('Token verification failed:', error.response?.data || error.message);
+    return false;
+  }
+};
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsLoading(true);
+      
+      const token = localStorage.getItem('token') || 
+                   localStorage.getItem('accessToken') || 
+                   localStorage.getItem('authToken') || 
+                   sessionStorage.getItem('token') ||
+                   sessionStorage.getItem('accessToken') ||
+                   sessionStorage.getItem('authToken');
+
+      if (!token) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        router.push('/signin');
+        return;
+      }
+
+      const isValid = await verifyToken(token);
+      
+      if (isValid) {
+        setIsAuthenticated(true);
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('authToken');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('authToken');
+        
+        setIsAuthenticated(false);
+        router.push('/signin');
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -20,11 +85,9 @@ const Canvas: React.FC<CanvasProps> = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     
-    // Set canvas size
     canvas.width = 800;
     canvas.height = 600;
     
-    // Clear canvas with white background
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
@@ -40,14 +103,13 @@ const Canvas: React.FC<CanvasProps> = () => {
     
     setIsDrawing(true);
     
-    // Configure tool settings
     if (tool === 'pen') {
       ctx.globalCompositeOperation = 'source-over';
       ctx.strokeStyle = color;
       ctx.lineWidth = brushSize;
     } else if (tool === 'eraser') {
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.lineWidth = brushSize * 2; // Make eraser bigger
+      ctx.lineWidth = brushSize * 2; 
     }
     
     ctx.lineCap = 'round';
@@ -104,17 +166,81 @@ const Canvas: React.FC<CanvasProps> = () => {
     link.click();
   };
 
+  const handleLogout = () => {
+    const confirmLogout = window.confirm('Are you sure you want to log out? Your current drawing will be cleared.');
+    if (confirmLogout) {
+      clearCanvas();
+      setTool('pen');
+      setBrushSize(2);
+      setColor('#000000');
+      
+      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userData');
+      
+      
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('authToken');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('userData');
+      
+      router.push('/signin');
+    }
+  };
+
   const presetColors: string[] = [
     '#000000', '#ff0000', '#00ff00', '#0000ff', 
     '#ffff00', '#ff00ff', '#00ffff'
   ];
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Verifying Access</h2>
+          <p className="text-gray-600">Please wait while we authenticate you...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
+          <div className="text-red-500 text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Access Denied</h2>
+          <p className="text-gray-600 mb-6">You need to sign in to access the canvas.</p>
+          <button
+            onClick={() => router.push('/signin')}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+          >
+            Go to Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800"></h1>
+      <div className="w-full max-w-6xl flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Canvas Drawing App</h1>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center gap-2"
+        >
+          🚪 Log Out
+        </button>
+      </div>
       
       <div className="mb-6 flex flex-wrap items-center gap-4 p-4 bg-white rounded-lg shadow-md">
-        {/* Tool Selection */}
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium text-gray-700">Tool:</label>
           <button
@@ -125,7 +251,7 @@ const Canvas: React.FC<CanvasProps> = () => {
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             } transition-colors`}
           >
-            ✏️ Pen
+            Pen
           </button>
           <button
             onClick={() => setTool('eraser')}
@@ -135,11 +261,10 @@ const Canvas: React.FC<CanvasProps> = () => {
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             } transition-colors`}
           >
-            🧹 Eraser
+            Eraser
           </button>
         </div>
 
-        {/* Color Selection (only show for pen) */}
         {tool === 'pen' && (
           <div className="flex items-center space-x-2">
             <label className="text-sm font-medium text-gray-700">Color:</label>
@@ -164,7 +289,7 @@ const Canvas: React.FC<CanvasProps> = () => {
           </div>
         )}
 
-        {/* Brush Size */}
+       
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium text-gray-700">
             {tool === 'pen' ? 'Brush Size:' : 'Eraser Size:'}
@@ -180,7 +305,7 @@ const Canvas: React.FC<CanvasProps> = () => {
           <span className="text-sm text-gray-600 min-w-[2rem]">{brushSize}px</span>
         </div>
 
-        {/* Action Buttons */}
+        
         <div className="flex space-x-2 ml-auto">
           <button
             onClick={clearCanvas}
