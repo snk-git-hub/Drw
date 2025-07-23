@@ -11,7 +11,7 @@ export default function Canvas() {
              
       if (!ctx) return;
             
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       let clicked=false;
       let StartX=0;
@@ -45,8 +45,9 @@ export default function Canvas() {
           const width = pos.x - StartX;
           const height = pos.y - StartY;
           ctx.clearRect(0,0,canvas.width,canvas.height);
-          ctx.fillStyle = 'white';
+          ctx.fillStyle = 'black';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.strokeStyle= 'white';
           ctx.strokeRect(StartX,StartY,width,height);
            
           console.log(pos.x)
