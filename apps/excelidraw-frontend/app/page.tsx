@@ -54,9 +54,6 @@ export default function CollaborativeDrawingLanding() {
         </div>
         
         <div className="hidden md:flex space-x-8">
-          <a href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-light uppercase tracking-wide">Features</a>
-          <a href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-light uppercase tracking-wide">Pricing</a>
-          <a href="#" className="text-zinc-400 hover:text-white transition-colors text-sm font-light uppercase tracking-wide">About</a>
         </div>
 
         <button 
@@ -91,9 +88,7 @@ export default function CollaborativeDrawingLanding() {
             <button className="px-12 py-4 bg-white text-black font-medium rounded-lg hover:bg-zinc-100 transform hover:scale-105 transition-all duration-200 text-sm uppercase tracking-wide shadow-2xl">
               Start Drawing
             </button>
-            <button className="px-12 py-4 border border-zinc-700 text-white hover:border-white hover:bg-white/5 transition-all duration-200 rounded-lg text-sm uppercase tracking-wide">
-              Watch Demo
-            </button>
+           
           </div>
 
           <div className="relative max-w-4xl mx-auto">
