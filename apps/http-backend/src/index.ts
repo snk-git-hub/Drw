@@ -8,9 +8,13 @@ import { prismaClient } from "@repo/db/client";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
-
-// signup route
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:3001','http://localhost:3002'], 
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+ 
 app.post("/signup", async (req: Request, res: Response) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
 
@@ -33,13 +37,12 @@ app.post("/signup", async (req: Request, res: Response) => {
 
         res.json({ userId: user.id });
     } catch (err) {
-  console.error("Signup error:", err);  // Add this
+  console.error("Signup error:", err);  
   res.status(500).json({ message: "internal server error" });
 
 }
 });
 
-// /signin route
 app.post("/signin", async (req: Request, res: Response) => {
     const parsedData = SigninSchema.safeParse(req.body);
 
@@ -67,11 +70,13 @@ app.post("/signin", async (req: Request, res: Response) => {
     res.json({ token });
 });
 
-// /room route
 app.post("/room", middleware, async (req: Request, res: Response) => {
+        console.log("Request body:", req.body); 
+
     const parsedData = CreateRoomSchema.safeParse(req.body);
 
     if (!parsedData.success) {
+        console.log("Validation error:", parsedData.error); 
         res.status(400).json({ message: "Incorrect inputs" });
         return;
     }
@@ -79,6 +84,9 @@ app.post("/room", middleware, async (req: Request, res: Response) => {
     // @ts-ignore
     const userId = req.userId;
 
+if (!userId) {
+  return res.status(401).json({ message: "Unauthorized: No userId in request" });
+}
     try {
         const room = await prismaClient.room.create({
             data: {
@@ -93,7 +101,6 @@ app.post("/room", middleware, async (req: Request, res: Response) => {
     }
 });
 
-// /chats/:roomId
 app.get("/chats/:roomId", async (req: Request, res: Response) => {
     try {
         const roomId = Number(req.params.roomId);
@@ -111,7 +118,6 @@ app.get("/chats/:roomId", async (req: Request, res: Response) => {
     }
 });
 
-// /room/:slug
 app.get("/room/:slug", async (req: Request, res: Response) => {
     const slug = req.params.slug;
 
@@ -121,7 +127,6 @@ app.get("/room/:slug", async (req: Request, res: Response) => {
 
     res.json({ room });
 });
-// / verify token
 
 app.post("/verify-token", (req: Request, res: Response) => {
   try {
