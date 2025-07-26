@@ -2,7 +2,9 @@ DRW - A Collaborative Whiteboard for Real-Time Drawing & Communication
 
 Real-time digital whiteboard for collaborative planning and design. Uses WebSocket for live updates and drawing synchronization, plus HTTP for authentication and file management.
 
+<img width="636" height="633" alt="image" src="https://github.com/user-attachments/assets/00adcdf6-b2bb-45c3-846f-8bc5eee176a2" />
 
+<img width="624" height="863" alt="image" src="https://github.com/user-attachments/assets/ac474b78-5def-4138-a3b1-1ead842ba8f7" />
 
 
 # Turborepo starter
