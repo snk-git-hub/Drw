@@ -38,7 +38,7 @@ export function RoomCanvas({roomId}: {roomId: string}) {
 
         ws.onerror = (error) => {
             console.error('WebSocket error:', error);
-            setError('Failed to connect to server');
+            setError('Failed to connect to server  /n press WIN+R');
             setIsConnecting(false);
         };
 

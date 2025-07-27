@@ -41,7 +41,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
           localStorage.setItem('authToken', res.data.token);
         }
         
-        router.push("/canvas");
+        router.push("/room");
       } else {
         const res = await axios.post(`${API_URL}/signup`, { 
           email, 
@@ -58,7 +58,8 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
           localStorage.setItem('authToken', res.data.token);
         }
         
-        router.push("/canvas");
+        // Redirect to room ID page instead of canvas
+        router.push("/room");
       }
     } catch (err: any) {
       console.error('Auth error:', err);
