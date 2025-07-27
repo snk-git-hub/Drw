@@ -1,6 +1,7 @@
 Todo's
 - [ ] Add bcrypt integration  
 - [ ] Validate token on frontend  
+- [ ] Use cookies for authentication/session management  
 - [ ] Add more shapes  
 - [ ] Improve chat schema
 
