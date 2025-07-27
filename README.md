@@ -48,14 +48,6 @@ pnpm install
 - `pnpm build`: Build all packages/apps
 - `pnpm lint`: Run linter
 
-## Remote Caching
-
-This project supports Turborepo Remote Caching:
-
-```sh
-npx turbo login
-npx turbo link
-```
 
 ## Contributing
 
