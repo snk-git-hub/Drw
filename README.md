@@ -1,9 +1,8 @@
-To Do's-
- -Add bcrypt integration
- -Validate token on frontend
- -Add more shapes
- -Improve chat schema
-
+Todo's
+- [ ] Add bcrypt integration  
+- [ ] Validate token on frontend  
+- [ ] Add more shapes  
+- [ ] Improve chat schema
 
 DRW - A Collaborative Whiteboard for Real-Time Drawing & Communication
 
