@@ -37,23 +37,25 @@ export default function RoomPage() {
     router.push(`/canvas/${roomId.trim()}`);
   };
 
-  const handleCreateRoom = async () => {
-    const newRoomId = generateRandomId();
-    setRoomId(newRoomId);
-    setError("");
-    setIsLoading(true);
+const handleCreateRoom = async () => {
+  const newRoomId = generateRandomId();
+  setRoomId(newRoomId);
+  setError("");
+  setIsLoading(true);
 
-    try {
-      sessionStorage.setItem("reload-once", "true");
+  try {
+    sessionStorage.setItem("reload-once", "true");
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push(`/canvas/${newRoomId}`);
-    } catch (err) {
-      setError("Failed to create room. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    router.push(`/canvas/${newRoomId}`);
+  } catch (err) {
+    setError("Failed to create room. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleSignOut = () => {
     localStorage.removeItem("authToken");

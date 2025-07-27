@@ -50,7 +50,7 @@ export default function CollaborativeDrawingLanding() {
           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
             <div className="w-4 h-4 bg-black rounded-sm"></div>
           </div>
-          <span className="text-white font-light text-lg tracking-wide">DrawSynDrc</span>
+          <span className="text-white font-light text-lg tracking-wide">DRW</span>
         </div>
         
         <div className="hidden md:flex space-x-8">
@@ -98,7 +98,7 @@ export default function CollaborativeDrawingLanding() {
                 <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 <div className="flex-1 text-center">
-                  <div className="text-zinc-400 text-xs font-light">drawsync.app/canvas/team-brainstorm</div>
+                  <div className="text-zinc-400 text-xs font-light">DRW.app/canvas/team-brainstorm</div>
                 </div>
               </div>
               
@@ -231,7 +231,7 @@ export default function CollaborativeDrawingLanding() {
               Ready to Start Creating?
             </h2>
             <p className="text-xl text-zinc-400 font-light mb-8">
-              Join thousands of teams already collaborating on DrawSync
+              Join thousands of teams already collaborating on DRW
             </p>
             <button className="px-12 py-4 bg-white text-black font-medium rounded-lg hover:bg-zinc-100 transform hover:scale-105 transition-all duration-200 text-sm uppercase tracking-wide shadow-2xl">
               Get Started Free
@@ -247,11 +247,11 @@ export default function CollaborativeDrawingLanding() {
             <div className="w-6 h-6 bg-white rounded-md flex items-center justify-center">
               <div className="w-3 h-3 bg-black rounded-sm"></div>
             </div>
-            <span className="text-zinc-400 font-light">DrawSync</span>
+            <span className="text-zinc-400 font-light">DRW</span>
           </div>
           
           <div className="text-zinc-500 text-sm font-light">
-            © 2025 DrawSync. Built for creators.
+            © 2025 DRW. Built for creators.
           </div>
         </div>
       </footer>
