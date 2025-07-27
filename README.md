@@ -3,7 +3,7 @@
 
 # DRW - Collaborative Whiteboard 
 
-#MIND MAP:
+# MIND MAP:
 
 A real-time digital whiteboard for collaborative planning and design with integrated chat functionality.
 
