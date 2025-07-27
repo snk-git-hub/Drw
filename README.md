@@ -3,6 +3,8 @@
 
 # DRW - Collaborative Whiteboard 
 
+#MIND MAP:
+
 A real-time digital whiteboard for collaborative planning and design with integrated chat functionality.
 
 ![App Screenshot](https://github.com/user-attachments/assets/00adcdf6-b2bb-45c3-846f-8bc5eee176a2)
