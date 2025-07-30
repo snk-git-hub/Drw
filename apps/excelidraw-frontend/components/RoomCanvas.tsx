@@ -3,7 +3,7 @@
 import { WS_URL } from "@/config";
 import { useEffect, useState } from "react";
 import { Canvas } from "./Canvas";
-import SplashScreen from "./SplashScreen"; // Import here
+import SplashScreen from "./SplashScreen"; 
 
 export function RoomCanvas({ roomId }: { roomId: string }) {
   const [socket, setSocket] = useState<WebSocket | null>(null);

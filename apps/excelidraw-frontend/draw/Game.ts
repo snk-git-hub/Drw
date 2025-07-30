@@ -31,7 +31,8 @@ export class Game {
     private startY = 0;
     private selectedTool: Tool = "circle";
     private currentPencilStroke: { x: number; y: number }[] = []; 
-    private currentEraserStroke: { x: number; y: number }[] = []; 
+    private currentEraserStroke: { x: number; y: number }[] = [];
+    private onSelectComplete?: (imageData: string) => void;
 
     socket: WebSocket;
 
@@ -53,8 +54,12 @@ export class Game {
         this.canvas.removeEventListener("mousemove", this.mouseMoveHandler)
     }
 
-    setTool(tool: "circle" | "pencil" | "rect" | "eraser") {
+    setTool(tool: Tool) {
         this.selectedTool = tool;
+    }
+
+    setSelectCompleteCallback(callback: (imageData: string) => void) {
+        this.onSelectComplete = callback;
     }
 
     async init() {
@@ -136,6 +141,40 @@ export class Game {
         this.ctx.closePath();
     }
 
+    drawSelectionOverlay(startX: number, startY: number, width: number, height: number) {
+        this.ctx.save();
+        
+        this.ctx.strokeStyle = "rgba(0, 150, 255, 0.8)";
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([5, 5]);
+        this.ctx.strokeRect(startX, startY, width, height);
+        
+        this.ctx.fillStyle = "rgba(0, 150, 255, 0.1)";
+        this.ctx.fillRect(startX, startY, width, height);
+        
+        this.ctx.restore();
+    }
+
+    captureSelectedArea(x: number, y: number, width: number, height: number): string {
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = Math.abs(width);
+        tempCanvas.height = Math.abs(height);
+        const tempCtx = tempCanvas.getContext("2d")!;
+        
+        const sourceX = width < 0 ? x + width : x;
+        const sourceY = height < 0 ? y + height : y;
+        const sourceWidth = Math.abs(width);
+        const sourceHeight = Math.abs(height);
+        
+        tempCtx.drawImage(
+            this.canvas,
+            sourceX, sourceY, sourceWidth, sourceHeight,
+            0, 0, sourceWidth, sourceHeight
+        );
+        
+        return tempCanvas.toDataURL("image/png");
+    }
+
     getCanvasCoordinates(e: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
         return {
@@ -165,6 +204,22 @@ export class Game {
 
         const selectedTool = this.selectedTool;
         let shape: Shape | null = null;
+        
+        if (selectedTool === "select") {
+            const minWidth = 10;
+            const minHeight = 10;
+            
+            if (Math.abs(width) >= minWidth && Math.abs(height) >= minHeight) {
+                const imageData = this.captureSelectedArea(this.startX, this.startY, width, height);
+                
+                if (this.onSelectComplete) {
+                    this.onSelectComplete(imageData);
+                }
+            }
+            
+            this.clearCanvas();
+            return;
+        }
         
         if (selectedTool === "rect") {
             shape = {
@@ -250,6 +305,8 @@ export class Game {
                 this.currentEraserStroke.push({ x: coords.x, y: coords.y });
                 
                 this.drawEraserStroke(this.currentEraserStroke);
+            } else if (selectedTool === "select") {
+                this.drawSelectionOverlay(this.startX, this.startY, width, height);
             }
         }
     }

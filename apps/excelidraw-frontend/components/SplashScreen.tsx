@@ -1,4 +1,3 @@
-// components/SplashScreen.tsx
 export default function SplashScreen() {
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-black text-white">

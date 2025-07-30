@@ -1,0 +1,11 @@
+{
+  "name": "geni",
+  "scripts": {
+    "start": "python geni.py",
+    "dev": "nodemon --watch '*.py' --exec python geni.py"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.0.2" 
+  }
+}
