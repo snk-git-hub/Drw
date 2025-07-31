@@ -31,9 +31,10 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 ## Tech Stack
 
 - **Frontend**: Next.js
-- **Backend**: Node.js
+- **Backend**: Node.js ,Flask
 - **Real-time**: WebSocket
 - **Monorepo**: Turborepo
+- 
 
 ## Project Structure
 <img width="673" height="823" alt="image" src="https://github.com/user-attachments/assets/26812702-1654-45aa-bac6-e806daca777f" />
