@@ -7,7 +7,7 @@
 
 A real-time digital whiteboard for collaborative planning and design with integrated chat functionality.
 
-![App Screenshot](https://github.com/user-attachments/assets/00adcdf6-b2bb-45c3-846f-8bc5eee176a2)
+<img width="1173" height="832" alt="image" src="https://github.com/user-attachments/assets/038614cd-e490-4e37-abb0-7cf62c021112" />
 
 
 
