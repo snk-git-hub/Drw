@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/e8372c6d-0706-4a4d-aa4a-6997b25e95c0
 [WhatsApp Image 2025-07-27 at 5.43.51 PM (1).pdf](https://github.com/user-attachments/files/21530658/WhatsApp.Image.2025-07-27.at.5.43.51.PM.1.pdf)
 ---
 
@@ -6,7 +8,10 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 
 
 
-Uploading WhatsApp Video 2025-07-31 at 6.08.51 PM.mp4…
+![WhatsApp Video 2025-07-31 at 6 08 51 PM](https://github.com/user-attachments/assets/15af02ff-5c48-4b04-995a-5b0669999031)
+
+
+
 
 
 
