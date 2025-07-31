@@ -91,20 +91,35 @@ class HandwrittenTextRenderer {
             cancelAnimationFrame(this.animationId);
         }
 
-        this.ctx.font = "28px 'Caveat', cursive";
+        console.log('Animating text at position:', x, y); 
+        this.ctx.font = "100px 'Caveat', cursive";
         this.ctx.fillStyle = "#ffffff";
         this.ctx.strokeStyle = "#ffffff";
-        this.ctx.lineWidth = 1.5;
+        this.ctx.lineWidth = 10;
         this.ctx.lineCap = "round";
         this.ctx.lineJoin = "round";
         
         const processedText = this.processLatexText(text);
         const words = processedText.split(' ');
         
-        let currentX = x;
-        let currentY = y;
-        const lineHeight = 40;
-        const maxWidth = this.canvas.width - 100;
+        let currentX = x + 30; 
+        let currentY = y + 20; 
+        const lineHeight = 120;
+        const maxWidth = this.canvas.width - 150;
+        
+        if (currentX > maxWidth) {
+            currentX = 50; 
+            currentY = y + lineHeight; 
+        }
+        
+        
+        if (currentY < 120) {
+            currentY = 120;
+        }
+        
+        if (currentY > this.canvas.height - 50) {
+            currentY = this.canvas.height - 150;
+        }
         
         let wordIndex = 0;
         let charIndex = 0;
@@ -120,7 +135,7 @@ class HandwrittenTextRenderer {
                 const charWidth = this.ctx.measureText(currentChar).width;
                 
                 if (currentX + charWidth > maxWidth) {
-                    currentX = x;
+                    currentX = 50;
                     currentY += lineHeight;
                 }
 
@@ -186,6 +201,7 @@ export function Canvas({
     const [selectedTool, setSelectedTool] = useState<Tool>("circle");
     const [isLoading, setIsLoading] = useState(false);
     const [flaskResponse, setFlaskResponse] = useState<string>("");
+    const [lastStrokePosition, setLastStrokePosition] = useState<{x: number, y: number}>({x: 50, y: 100});
 
     useEffect(() => {
         game?.setTool(selectedTool);
@@ -193,31 +209,117 @@ export function Canvas({
 
     useEffect(() => {
         if (canvasRef.current) {
-            const g = new Game(canvasRef.current, roomId, socket);
-            textRendererRef.current = new HandwrittenTextRenderer(canvasRef.current);
+            const canvas = canvasRef.current;
+            const g = new Game(canvas, roomId, socket);
+            textRendererRef.current = new HandwrittenTextRenderer(canvas);
             
             if (g.setSelectCompleteCallback) {
                 g.setSelectCompleteCallback(handleSelectAreaComplete);
             }
+
+            let isDrawingWithPencil = false;
+            let currentPosition = {x: 50, y: 100};
+
+            const handleMouseDown = (e: MouseEvent) => {
+                if (selectedTool === "pencil") {
+                    isDrawingWithPencil = true;
+                    const rect = canvas.getBoundingClientRect();
+                    currentPosition = {
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top
+                    };
+                }
+            };
+
+            const handleMouseMove = (e: MouseEvent) => {
+                if (isDrawingWithPencil && selectedTool === "pencil") {
+                    const rect = canvas.getBoundingClientRect();
+                    currentPosition = {
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top
+                    };
+                }
+            };
+
+            const handleMouseUp = (e: MouseEvent) => {
+                if (isDrawingWithPencil && selectedTool === "pencil") {
+                    const rect = canvas.getBoundingClientRect();
+                    const finalPosition = {
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top
+                    };
+                    console.log('Pencil stroke ended at:', finalPosition);
+                    setLastStrokePosition(finalPosition);
+                    isDrawingWithPencil = false;
+                }
+            };
+
+            // Touch event listeners for mobile support - only for pencil
+            const handleTouchStart = (e: TouchEvent) => {
+                if (selectedTool === "pencil" && e.touches.length > 0) {
+                    isDrawingWithPencil = true;
+                    const rect = canvas.getBoundingClientRect();
+                    currentPosition = {
+                        x: e.touches[0].clientX - rect.left,
+                        y: e.touches[0].clientY - rect.top
+                    };
+                }
+            };
+
+            const handleTouchMove = (e: TouchEvent) => {
+                if (isDrawingWithPencil && selectedTool === "pencil" && e.touches.length > 0) {
+                    const rect = canvas.getBoundingClientRect();
+                    currentPosition = {
+                        x: e.touches[0].clientX - rect.left,
+                        y: e.touches[0].clientY - rect.top
+                    };
+                }
+            };
+
+            const handleTouchEnd = (e: TouchEvent) => {
+                if (isDrawingWithPencil && selectedTool === "pencil") {
+                    console.log('Pencil stroke ended at:', currentPosition);
+                    setLastStrokePosition(currentPosition);
+                    isDrawingWithPencil = false;
+                }
+            };
+
+            canvas.addEventListener('mousedown', handleMouseDown);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mouseup', handleMouseUp);
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', handleTouchEnd);
             
             setGame(g);
 
             return () => {
+                canvas.removeEventListener('mousedown', handleMouseDown);
+                canvas.removeEventListener('mousemove', handleMouseMove);
+                canvas.removeEventListener('mouseup', handleMouseUp);
+                canvas.removeEventListener('touchstart', handleTouchStart);
+                canvas.removeEventListener('touchmove', handleTouchMove);
+                canvas.removeEventListener('touchend', handleTouchEnd);
                 g.destroy();
                 textRendererRef.current?.destroy();
             }
         }
-    }, [canvasRef]);
+    }, [canvasRef, selectedTool]); 
 
     useEffect(() => {
         if (flaskResponse && textRendererRef.current) {
+            console.log('Flask response received, using stroke position:', lastStrokePosition); 
             textRendererRef.current.clearText();
             
             setTimeout(() => {
-                textRendererRef.current?.animateText(flaskResponse, 50, 100);
+                textRendererRef.current?.animateText(
+                    flaskResponse, 
+                    lastStrokePosition.x, 
+                    lastStrokePosition.y
+                );
             }, 500);
         }
-    }, [flaskResponse]);
+    }, [flaskResponse]); 
 
     const handleSelectAreaComplete = async (imageData: string) => {
         setIsLoading(true);
@@ -231,7 +333,7 @@ export function Canvas({
                     imageData: imageData,
                     prompt: `You are an expert in vision, math, science, handwriting, code, and analysis. Carefully examine the visual content provided and respond based on what it shows:
 
-- If it contains written text: summarize or interpret it.
+-if its question from GK give ans
 - If it includes a math problem: provide only the final answer. If something is unclear, ask a precise question.
 - If it's a chart or graph: explain the key trends or data insights.
 - If it shows a diagram: describe the components and what they represent.
