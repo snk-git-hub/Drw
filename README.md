@@ -43,9 +43,6 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 
 ## Development
 
-### Prerequisites
-- Node.js
-- pnpm
 
 ### Setup
 ```sh
