@@ -58,7 +58,7 @@ pnpm install
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or PR for any changes.
+Contributions are welcome :) Please open an issue or PR for any changes.
 
 ---
 
