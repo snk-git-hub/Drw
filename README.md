@@ -1,8 +1,4 @@
 
-https://github.com/user-attachments/assets/e8372c6d-0706-4a4d-aa4a-6997b25e95c0
-[WhatsApp Image 2025-07-27 at 5.43.51 PM (1).pdf](https://github.com/user-attachments/files/21530658/WhatsApp.Image.2025-07-27.at.5.43.51.PM.1.pdf)
----
-
 # DRW - Collaborative AI powered Whiteboard 
 A collaborative whiteboard which have a websocket that syncs in real-time, also which has AI integrated features, like it will help to get AI assistance in your planning, or if you're solving DSA math or any logical or architecture planning, it will help or assist you by just selecting the portion with an AI lens tool with in canvas. Some of the benefits are that you don't need to take screenshots/snapshots and put them in an AI. You can get help within the Canvas itself, and it saves your time, and it also helps students or kids to ask doubts in maths or their homework. Also, it helps to solve math problems. Just check out the video below to understand how it works
 
