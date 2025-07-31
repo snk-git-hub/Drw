@@ -3,6 +3,7 @@
 A collaborative whiteboard which have a websocket that syncs in real-time, also which has AI integrated features, like it will help to get AI assistance in your planning, or if you're solving DSA math or any logical or architecture planning, it will help or assist you by just selecting the portion with an AI lens tool with in canvas. Some of the benefits are that you don't need to take screenshots/snapshots and put them in an AI. You can get help within the Canvas itself, and it saves your time, and it also helps students or kids to ask doubts in maths or their homework. Also, it helps to solve math problems. Just check out the video below to understand how it works
 
 
+Demo:
 
 ![WhatsApp Video 2025-07-31 at 6 08 51 PM](https://github.com/user-attachments/assets/15af02ff-5c48-4b04-995a-5b0669999031)
 
