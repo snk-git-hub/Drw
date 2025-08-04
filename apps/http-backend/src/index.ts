@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import jwt, { verify } from "jsonwebtoken";
 import cors from "cors";
 import { JWT_SECRET } from '@repo/backend-common/config';
@@ -25,12 +26,13 @@ app.post("/signup", async (req: Request, res: Response) => {
     }
 
     const { email, password, name } = parsedData.data;
-
+   
     try {
+        const hash_pass= await bcrypt.hash(password,10);
         const user = await prismaClient.user.create({
             data: {
                 email,
-                password, //  TODO: hash before production
+                password:hash_pass, 
                 name
             }
         });
@@ -53,10 +55,12 @@ app.post("/signin", async (req: Request, res: Response) => {
 
     const { email, password } = parsedData.data;
 
+   
+    try{
     const user = await prismaClient.user.findFirst({
         where: {
             email,
-            password //  TODO: compare hashed password
+            
         }
     });
 
@@ -64,11 +68,29 @@ app.post("/signin", async (req: Request, res: Response) => {
         res.status(403).json({ message: "Not authorized" });
         return;
     }
-
+  const decoded_pass= await bcrypt.compare(password,user.password);
+if(!decoded_pass){
+    res.status(403).json({
+        message:"Invalid credentials"
+    });
+    return;
+}
     const token = jwt.sign({ userId: user.id }, JWT_SECRET);
 
     res.json({ token });
+}
+catch(err){
+console.error("signin error:",err);
+res.status(500).json({message:"internal server error"});
+}
 });
+
+
+
+
+
+
+
 
 app.post("/room", middleware, async (req: Request, res: Response) => {
         console.log("Request body:", req.body); 
@@ -100,6 +122,11 @@ if (!userId) {
         res.status(409).json({ message: "Room already exists with this name" });
     }
 });
+
+
+
+
+
 
 app.get("/chats/:roomId", async (req: Request, res: Response) => {
     try {
