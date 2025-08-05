@@ -16,11 +16,13 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 
 ## Todo List
 
-- [x] Add bcrypt integration
+- [x] Add bcrypt integration  
 - [ ] Validate token on frontend  
 - [ ] Use cookies for authentication/session management  
 - [ ] Add more shapes  
-- [ ] Improve chat schema
+- [ ] Improve chat schema  
+- [ ] Add RAG
+
 
 ## Tech Stack
 
