@@ -16,7 +16,7 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 
 ## Todo List
 
-- [ ] Add bcrypt integration  
+- [x] Add bcrypt integration
 - [ ] Validate token on frontend  
 - [ ] Use cookies for authentication/session management  
 - [ ] Add more shapes  
