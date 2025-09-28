@@ -21,7 +21,7 @@ A collaborative whiteboard which have a websocket that syncs in real-time, also 
 - [ ] Use cookies for authentication/session management  
 - [ ] Add more shapes  
 - [ ] Improve chat schema  
-- [ ] Add RAG
+- [ ] Integrate RAG (Retrieval-Augmented Generation) for AI features
 
 
 ## Tech Stack
@@ -212,16 +212,6 @@ When making changes:
 2. Make your changes
 3. Test thoroughly
 4. Submit a pull request
-
-## Next Steps
-
-Based on your todo list, consider implementing:
-- [ ] Complete bcrypt integration for password hashing
-- [ ] Add token validation on frontend
-- [ ] Implement cookie-based authentication
-- [ ] Add more drawing shapes
-- [ ] Improve chat schema
-- [ ] Integrate RAG (Retrieval-Augmented Generation) for AI features
 
 
 shivanandu.k@yahoo.com
