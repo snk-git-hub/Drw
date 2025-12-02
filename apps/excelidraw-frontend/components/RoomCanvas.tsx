@@ -20,7 +20,7 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-
+   console.log(token)
     if (!token) {
       console.error("No token found in localStorage");
       setError("No authentication token found");

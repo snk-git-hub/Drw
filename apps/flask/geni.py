@@ -5,7 +5,7 @@ import io
 from PIL import Image
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyDknpmFwmNDEnPixxayAs8VVcr0T_DP9rU")
+genai.configure(api_key="AIzaSyBBKBm5TdNE4Y7ECSda4WST3vogf37oAXI")
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 app = Flask(__name__)

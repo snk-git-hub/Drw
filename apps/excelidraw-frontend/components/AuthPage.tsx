@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL =  "http://localhost:3002";
 
 export function AuthPage({ isSignin }: { isSignin: boolean }) {
   const router = useRouter();
@@ -36,7 +36,7 @@ export function AuthPage({ isSignin }: { isSignin: boolean }) {
           },
           timeout: 10000 
         });
-        
+  console.log("Signin response:", res.data);
         if (res.data.token) {
           localStorage.setItem('authToken', res.data.token);
         }

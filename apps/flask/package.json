@@ -2,7 +2,7 @@
   "name": "geni",
   "scripts": {
     "start": "python geni.py",
-    "dev": "nodemon --watch '*.py' --exec python geni.py"
+    "dev": "nodemon --watch '*.py' --exec python3 geni.py"
   },
   "dependencies": {},
   "devDependencies": {

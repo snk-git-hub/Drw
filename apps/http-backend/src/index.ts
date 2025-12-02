@@ -173,6 +173,6 @@ app.post("/verify-token", (req: Request, res: Response) => {
 
 
 
-app.listen(3001, () => {
-    console.log("http-backend running on port 3001");
+app.listen(3002, () => {
+    console.log("http-backend running on port 3002");
 });
